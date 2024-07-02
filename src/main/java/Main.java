@@ -5,14 +5,14 @@ public class Main {
     public static void main(String[] args) {
 
         GroceryList groceries = new GroceryList();
-
-        groceries.addItem("milk");
-        groceries.addItem("butter", 2);
+        groceries.addItem("milk", 1);
+        groceries.addItem("butter", 1);
+        groceries.addItem("cereals", 1);
+        groceries.removeItem()
         groceries.printList();
-        
     }
-
-    private static int menuSelection() {
+    
+    public static int menuSelection() {
         
         Scanner s = new Scanner(System.in);
         for(int selection;;) {
@@ -26,5 +26,5 @@ public class Main {
                     return selection;
             } catch (Exception e) {   }
         }
-    }      
+    }   
 }
