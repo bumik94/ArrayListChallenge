@@ -4,27 +4,25 @@ public class Main {
     
     public static void main(String[] args) {
 
-        GroceryList groceries = new GroceryList();
-        groceries.addItem("milk", 1);
-        groceries.addItem("butter", 1);
-        groceries.addItem("cereals", 1);
-        groceries.removeItem()
-        groceries.printList();
+        GroceryList groceries = new GroceryList(true);
+        Menu menu = new Menu(groceries);
+        menu.menu();
     }
-    
-    public static int menuSelection() {
-        
+
+    public static int getInt() {
         Scanner s = new Scanner(System.in);
-        for(int selection;;) {
-            try {
-                System.out.println("""
-                        0 - shutdown
-                        1 - add item(s)
-                        2 - remove item(s)""");
-                selection = Integer.parseInt(s.nextLine());
-                if (selection >= 0 && selection <= 2)
-                    return selection;
-            } catch (Exception e) {   }
+        for (;;) {
+            try { return Integer.parseInt(s.nextLine()); }
+            catch (Exception e) { System.out.print("""
+                    [Invalid input]
+                    }_""");
+            }
         }
-    }   
+    }
+
+    public static String getName() {
+        Scanner s = new Scanner(System.in);
+        return s.nextLine();
+    }
+
 }

@@ -1,29 +1,40 @@
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 public class GroceryList {
 
     // a list to store grocery items
     private ArrayList<GroceryItem> groceryItems = new ArrayList<>();
-    Scanner s = new Scanner(System.in);
 
-    public GroceryList() {  }
-
-    // add item to the list
-    public void addItem(String name) {
-
-        groceryItems.add(new GroceryItem(name));
+    // Constructor
+    public GroceryList() {   }
+    public GroceryList(boolean debug) {
+        groceryItems.add(new GroceryItem("milk"));
+        groceryItems.add(new GroceryItem("butter"));
+        groceryItems.add(new GroceryItem("cereals", 2));
     }
 
+    // add item to the list
     public void addItem() {
 
-        System.out.println("[Add item]");
-        System.out.print("[name: ");
-        String name = getName();
-        System.out.print("[quantity: ");
-        int quantity = getInt();
-        addItem(name, quantity);
+        System.out.print("""
+                [========]
+                [Add item]
+                (name)
+                }_""");
+        String name = Main.getName();
+        for (int quantity;;) {
+            System.out.print("""
+                (quantity)
+                }_""");
+            quantity = Main.getInt();
+            if (quantity >= 0) {
+                addItem(name, quantity);
+                break;
+            }
+            System.out.println("""
+                    [Invalid number]
+                    }_""");
+        }
     }
     
     // add item with quantity to the list
@@ -35,16 +46,28 @@ public class GroceryList {
     // remove item from the list
     public void removeItem() {
 
-        System.out.println("[Delete item]");
-        printList();
-        
         for (int index;;) {
-            index = getInt();
+            if (groceryItems.isEmpty()) {
+                System.out.println("[Empty]");
+                break; }
+            System.out.println("""
+                    [===========]
+                    [Remove item]
+                    [-----------]""");
+            printList();
+            System.out.println("} 0. cancel");
+            index = Main.getInt();
             if (index >= 0 && index <= groceryItems.size()) {
                 if (index == 0) {
-                     break;
+                    break;
+                }
                 groceryItems.remove(--index);
+                break;
             }
+            System.out.println("""
+                    [----------------]
+                    [Invalid number]
+                    }_""");
         }
     }
 
@@ -53,29 +76,15 @@ public class GroceryList {
 
         int enumerate = 1;
         for (GroceryItem item : groceryItems) {
-            System.out.println(enumerate++ + ". " + item.getString());
+            System.out.println("[ " + enumerate++ + ". " + item.getString());
         }
-    }
-
-    public static int getInt() {
-        Scanner s = new Scanner(System.in);
-        for (;;) {
-            try {
-                return Integer.parseInt(s.nextLine());
-            } catch (Exception e) {  }
-        }
-    }
-
-    public static String getName() {
-        Scanner s = new Scanner(System.in);
-        return s.nextLine();
     }
 
     public static int promptSelection(String prompt, int max) {
 
         for(int selection;;) {
             System.out.println(prompt);
-            selection = getInt();
+            selection = Main.getInt();
             if (selection >= 0 && selection <= max) { return selection; }
         }
     }
@@ -103,4 +112,46 @@ class GroceryItem {
         
         return item + " [" + quantity + "]";
     }
-}      
+}
+
+class Menu {
+
+    GroceryList groceryList;
+
+    public Menu(GroceryList groceryList) {
+
+         this.groceryList = groceryList;
+    }
+
+    public void menu() {
+
+        for (int index;;) {
+            System.out.println("""
+                    [============]
+                    [Grocery list]
+                    [------------]""");
+            groceryList.printList();
+            System.out.print("""
+                    [------------]
+                    [ 1 - add item
+                    [ 2 - remove item
+                    [ 0 - shutdown
+                    }_""");
+            index = Main.getInt();
+            if (index >= 0 && index <= 2) {
+                // 0. shutdown
+                if (index == 0) {
+                    break;
+                }
+                // 1. add item
+                else if (index == 1) {
+                    groceryList.addItem();
+                }
+                // 2. remove item
+                else if (index == 2) {
+                    groceryList.removeItem();
+                }
+            }
+        }
+    }
+}
