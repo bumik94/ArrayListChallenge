@@ -9,7 +9,7 @@ public class GroceryList {
 
     // Constructor
     public GroceryList() {   }
-    public GroceryList(boolean debug) {
+    public GroceryList(boolean test) {
         groceryItems.add(new GroceryItem("milk"));
         groceryItems.add(new GroceryItem("butter"));
         groceryItems.add(new GroceryItem("cereals", 2));
@@ -22,21 +22,31 @@ public class GroceryList {
                 [========]
                 [Add item]
                 (name)
-                }_""");
-        String name = Main.getName();
-        for (int quantity;;) {
+                }""" + " ");
+        String name = Main.getString();
+        for (boolean duplicate = false;;) {
             System.out.print("""
                 (quantity)
-                }_""");
-            quantity = Main.getInt();
-            if (quantity >= 0) {
-                addItem(name, quantity);
-                Collections.sort(groceryItems);
-                break;
+                }""" + " ");
+            int quantity = Main.getInt();
+            if (quantity > 0) { 
+                // search for duplicate
+                for (GroceryItem item : groceryItems) {
+                    if (name.equals(item.getName())) {
+                        item.setQuantity(item.getQuantity() + quantity);
+                        duplicate = true;
+                    }
+                // when no duplicate is found, add new item and sort
+                } if (!duplicate) {
+                    addItem(name, quantity);
+                    Collections.sort(groceryItems);
+                    // terminate for loop after adding item
+                    break; } break;
             }
+            // error message for incorrect quantity
             System.out.println("""
                 [Invalid number]
-                }_""");
+                }""" + " ");
         }
     }
     
@@ -48,27 +58,30 @@ public class GroceryList {
 
     // remove item from the list
     public void removeItem() {
-
-        for (int index;;) {
-            if (groceryItems.isEmpty()) {
-                System.out.println("[Empty]");
-                break; 
-            }
+        
+        if (groceryItems.isEmpty()) {
+            System.out.println("[Empty]");
+        } else {
             System.out.println("""
                     [===========]
                     [Remove item]
                     [-----------]""");
             printList();
-            System.out.println("} 0. cancel");
-            index = Main.getInt();
-            if (index >= 0 && index <= groceryItems.size()) {
-                if (index == 0) { break; }
-                groceryItems.remove(--index);
-                break;
-            }
-            System.out.println("""
+            System.out.print("""
+                    [ 0. cancel ]
+                    }""" + " ");
+            for (int index;;) {
+                index = Main.getInt();
+                if (index >= 0 && index <= groceryItems.size()) {
+                    if (index == 0) { break; }
+                    groceryItems.remove(--index);
+                    Collections.sort(groceryItems);
+                    break;
+                }
+                System.out.print("""
                     [Invalid number]
-                    }_""");
+                    }""" + " ");
+            }
         }
     }
 
@@ -80,15 +93,6 @@ public class GroceryList {
             System.out.println("[ " + enumerate++ + ". " + item.getString());
         }
     }
-
-    public static int promptSelection(String prompt, int max) {
-
-        for(int selection;;) {
-            System.out.println(prompt);
-            selection = Main.getInt();
-            if (selection >= 0 && selection <= max) { return selection; }
-        }
-    }
 }
 
 class GroceryItem implements Comparable<GroceryItem> {
@@ -97,8 +101,11 @@ class GroceryItem implements Comparable<GroceryItem> {
     private String name;
     private int quantity;
 
+    // method override used by Comparable class to compare specified field
+    // of the class inside of ArrayList with each other
     @Override
     public int compareTo(GroceryItem item) {
+        
         return name.compareTo(item.name);
     }
 
@@ -111,6 +118,21 @@ class GroceryItem implements Comparable<GroceryItem> {
     public GroceryItem(String name, int quantity) {
         
         this.name = name;
+        this.quantity = quantity;
+    }
+
+    public String getName() {
+
+        return this.name;
+    }
+
+    public int getQuantity() {
+
+        return this.quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        
         this.quantity = quantity;
     }
 
@@ -139,10 +161,10 @@ class Menu {
             groceryList.printList();
             System.out.print("""
                     [------------]
-                    [ 1 - add item
-                    [ 2 - remove item
-                    [ 0 - shutdown
-                    }_""");
+                    [ 1. add item
+                    [ 2. remove item
+                    [ 0. shutdown
+                    }""" + " ");
             index = Main.getInt();
             if (index >= 0 && index <= 2) {
                 // 0. shutdown
