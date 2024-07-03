@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.lang.Comparable;
 
 public class GroceryList {
 
@@ -29,6 +31,7 @@ public class GroceryList {
             quantity = Main.getInt();
             if (quantity >= 0) {
                 addItem(name, quantity);
+                Collections.sort(groceryItems);
                 break;
             }
             System.out.println("""
@@ -49,7 +52,8 @@ public class GroceryList {
         for (int index;;) {
             if (groceryItems.isEmpty()) {
                 System.out.println("[Empty]");
-                break; }
+                break; 
+            }
             System.out.println("""
                     [===========]
                     [Remove item]
@@ -58,9 +62,7 @@ public class GroceryList {
             System.out.println("} 0. cancel");
             index = Main.getInt();
             if (index >= 0 && index <= groceryItems.size()) {
-                if (index == 0) {
-                    break;
-                }
+                if (index == 0) { break; }
                 groceryItems.remove(--index);
                 break;
             }
@@ -89,27 +91,32 @@ public class GroceryList {
     }
 }
 
-class GroceryItem {
+class GroceryItem implements Comparable<GroceryItem> {
 
     // a class to store data about grocery tiems and their quantities
-    private String item;
+    private String name;
     private int quantity;
 
-    public GroceryItem(String item) {
+    @Override
+    public int compareTo(GroceryItem item) {
+        return name.compareTo(item.name);
+    }
+
+    public GroceryItem(String name) {
         
-        this.item = item;
+        this.name = name;
         this.quantity = 1;
     }
 
-    public GroceryItem(String item, int quantity) {
+    public GroceryItem(String name, int quantity) {
         
-        this.item = item;
+        this.name = name;
         this.quantity = quantity;
     }
 
     public String getString() {
         
-        return item + " [" + quantity + "]";
+        return name + " [" + quantity + "]";
     }
 }
 
