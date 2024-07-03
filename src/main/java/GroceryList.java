@@ -65,7 +65,6 @@ public class GroceryList {
                 break;
             }
             System.out.println("""
-                    [----------------]
                     [Invalid number]
                     }_""");
         }
