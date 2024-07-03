@@ -32,8 +32,8 @@ public class GroceryList {
                 break;
             }
             System.out.println("""
-                    [Invalid number]
-                    }_""");
+                [Invalid number]
+                }_""");
         }
     }
     
