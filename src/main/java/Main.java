@@ -3,25 +3,25 @@ import java.util.Scanner;
 public class Main {
     
     public static void main(String[] args) {
-
-        GroceryList groceries = new GroceryList();
-        Menu menu = new Menu(groceries);
-        menu.menu();
+        var groceries = new GroceryList(true);
+        
+        groceries.menu();
     }
 
-    public static int getInt() {
-        Scanner s = new Scanner(System.in);
+    public static int getInt(String prompt) {
+        var s = new Scanner(System.in);
+        
         for (;;) {
+            System.out.print(prompt);
             try { return Integer.parseInt(s.nextLine()); }
-            catch (Exception e) { System.out.print("""
-                    [Invalid input]
-                    }""" + " ");
-            }
+            catch (Exception e) {   }
         }
     }
 
-    public static String getString() {
-        Scanner s = new Scanner(System.in);
+    public static String getString(String prompt) {
+        var s = new Scanner(System.in);
+        
+        System.out.print(prompt);
         return s.nextLine();
     }
 
