@@ -1,9 +1,10 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.lang.Comparable;
+import java.util.Scanner;
 
 public class GroceryList {
-    private int WIDTH = 20;
+    private final int WIDTH = 20;
     // a list to store grocery items
     private ArrayList<GroceryItem> groceryItems = new ArrayList<>();
 
@@ -20,11 +21,9 @@ public class GroceryList {
             int quantity;
         boolean duplicate = false;
 
-        System.out.println("=".repeat(WIDTH));
-        System.out.println("[Add item]\n");
-        String name = Main.getString("(name): ");
+        String name = getString("(name): ");
         System.out.println();
-        do { quantity = Main.getInt("(quantity): "); }
+        do { quantity = getInt("(quantity): "); }
         while (quantity <= 0);
         
         // search for duplicate entry and
@@ -34,9 +33,8 @@ public class GroceryList {
                 item.setQuantity(item.getQuantity() + quantity);
                 duplicate = true;
             }
-        }
         // when no duplicate is found, add new item and sort
-        if (!duplicate) {
+        } if (!duplicate) {
             addItem(name, quantity);
             Collections.sort(groceryItems);
         }
@@ -49,26 +47,13 @@ public class GroceryList {
 
     // remove item from the list
     private void removeItem() {
+        int index;
         
-        if (groceryItems.isEmpty()) {
-            System.out.println("\n[Empty]\n");
-        } else {
-            System.out.println("=".repeat(WIDTH));
-            System.out.println("[Remove item]");
-            System.out.println("-".repeat(WIDTH));
-            printList();
-            System.out.println("[ 0. cancel");
-            System.out.println("-".repeat(WIDTH));
-            
-            for (int index;;) {
-                index = Main.getInt("# ");
-                if (index >= 0 && index <= groceryItems.size()) {
-                    if (index == 0) { break; }
-                    groceryItems.remove(--index);
-                    Collections.sort(groceryItems);
-                    break;
-                }
-            }
+        do{ index = getInt("# "); }
+        while (index < 0 || index > groceryItems.size());
+        if (index > 0) {
+            groceryItems.remove(--index);
+            Collections.sort(groceryItems);
         }
     }
 
@@ -80,7 +65,8 @@ public class GroceryList {
             System.out.println("[ " + (enumerate++) + ". " + item.getString());
         }
     }
-    
+
+    // main menu method to operate 
     public void menu() {
         boolean repeat = true;
             int index;
@@ -96,16 +82,55 @@ public class GroceryList {
                     [ 0. shutdown""");
             System.out.println("-".repeat(WIDTH));
            
-            do { index = Main.getInt("# "); }
+            do { index = getInt("# "); }
             while (index < 0 || index > 2);
-
+            System.out.println();
+           
             switch (index) {
-                case 0 -> repeat = false;
-                case 1 -> addItem();
-                case 2 -> removeItem();
-            }
+                case 0 -> { // Terminate program
+                    repeat = false;
+                }
+                case 1 -> { // Add item
+                    System.out.println("=".repeat(WIDTH));
+                    System.out.println("[Add item]");
+                    System.out.println("-".repeat(WIDTH));
+                    System.out.println();
+                    addItem();
+                }
+                case 2 -> { // Remove item
+                    if (groceryItems.isEmpty()) {
+                        System.out.println("[Empty]");
+                    } else {
+                        System.out.println("=".repeat(WIDTH));
+                        System.out.println("[Remove item]");
+                        System.out.println("-".repeat(WIDTH));
+                        printList();
+                        System.out.println("[ 0. cancel");
+                        System.out.println("-".repeat(WIDTH));
+                        removeItem();
+                    }
+                }
+            } System.out.println();
         } while (repeat);
     }
+
+    public static int getInt(String prompt) {
+        var s = new Scanner(System.in);
+
+        for (;;) {
+            System.out.print(prompt);
+            try { return Integer.parseInt(s.nextLine()); }
+            catch (Exception e) {   }
+        }
+    }
+
+    public static String getString(String prompt) {
+        var s = new Scanner(System.in);
+
+        System.out.print(prompt);
+        return s.nextLine();
+    }
+
 }
 
 class GroceryItem implements Comparable<GroceryItem> {
