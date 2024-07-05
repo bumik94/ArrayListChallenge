@@ -16,7 +16,7 @@ public class GroceryList {
     }
 
     // add item to the list
-    public void addItem() {
+    private void addItem() {
             int quantity;
         boolean duplicate = false;
 
@@ -43,12 +43,12 @@ public class GroceryList {
     }
     
     // add item with quantity to the list
-    public void addItem(String name, int quantity) {
+    private void addItem(String name, int quantity) {
         groceryItems.add(new GroceryItem(name, quantity));
     }
 
     // remove item from the list
-    public void removeItem() {
+    private void removeItem() {
         
         if (groceryItems.isEmpty()) {
             System.out.println("\n[Empty]\n");
@@ -73,7 +73,7 @@ public class GroceryList {
     }
 
     // print enumerated list of groceries
-    public void printList() {
+    private void printList() {
         int enumerate = 1;
         
         for (GroceryItem item : groceryItems) {
